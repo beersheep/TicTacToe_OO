@@ -20,4 +20,13 @@ class Board
   end
 end
 
+class Player
+  def initialize(name, mark)
+    @name = name
+    @mark = mark
+    @square_taken = []
+  end
+end
+
+
 Board.new.draw_board
