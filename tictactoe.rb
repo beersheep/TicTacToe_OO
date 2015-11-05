@@ -37,10 +37,19 @@ class Board
     @board.select {|pos, value| value == " "}.size == 0
   end
 
+  def check_for_empty(choice)
+    if !empty_square.include?(choice)
+      begin
+      puts "The square has been taken, please select other squares."
+      choice = gets.chomp.to_i
+      end until empty_square.include?(choice)
+    end
+  end
+
 end
 
 class Player
-  attr_reader :board
+  attr_reader :board, :mark
   def initialize(name, mark)
     @name = name
     @mark = mark
@@ -62,16 +71,11 @@ class Game
     if @current_player == @player
       puts "Please select a square(1-9):"
       choice = gets.chomp.to_i
-      begin
-        if !@board.empty_square.include?(choice)
-        puts "The square has been taken, please select other squares."
-        choice = gets.chomp.to_i
-      end until @board.empty_square.include?(choice)
-        end
-      @board[choice] = "O"
+      @board.check_for_empty(choice)
+      @board[choice] = @current_player.mark
     else
       choice = @board.empty_square.sample
-      @board[choice] = "X"
+      @board[choice] = @current_player.mark
     end
   end
 
