@@ -1,3 +1,5 @@
+require 'pry'
+
 class Board
   attr_reader :board
 
@@ -18,15 +20,41 @@ class Board
     puts "    |    |    "
     puts " #{board[7]}  | #{board[8]}  | #{board[9]}  "
   end
-end
 
-class Player
-  def initialize(name, mark)
-    @name = name
-    @mark = mark
-    @square_taken = []
+  def []=(position, mark)
+    @board[position] = mark
   end
 end
 
+class Player
+  attr_reader :board
+  def initialize(name, mark)
+    @name = name
+    @mark = mark
+    @squares_taken = []
+  end
+end
 
-Board.new.draw_board
+class Game
+  def initialize 
+    @player = Player.new("Roy", "O")
+    @computer = Player.new("Computer", "X")
+    @board = Board.new
+  end
+
+  def pick_a_square
+    puts "Please select a square(1-9):"
+    choice = gets.chomp.to_i
+    @board[choice] = "O"
+  end
+
+  def play
+    @board.draw_board
+    pick_a_square
+    @board.draw_board
+  end
+
+end
+# binding.pry
+Game.new.play
+
