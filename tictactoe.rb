@@ -32,6 +32,11 @@ class Board
   def empty_square
     @board.select {|pos, value| value == " "}.keys
   end
+
+  def no_space
+    @board.select {|pos, value| value == " "}.size == 0
+  end
+
 end
 
 class Player
@@ -79,15 +84,16 @@ class Game
 
   def play
     @board.draw_board
-    
-    pick_a_square
-    change_player
-    pick_a_square
-    @board.draw_board
+    loop do 
+      pick_a_square
+      @board.draw_board
+      change_player
+      break if @board.no_space
+    end
       
   end
 
 end
-
+# binding.pry
 Game.new.play
 
