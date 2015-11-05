@@ -21,10 +21,6 @@ class Board
     puts " #{board[7]}  | #{board[8]}  | #{board[9]}  "
   end
 
-  # def [](position)
-  #   @board[position]
-  # end
-
   def []=(position, mark)
     @board[position] = mark
   end
@@ -146,7 +142,7 @@ class Game
 
 end
 
-a = Game.new
-a.play
+Game.new.play
+
 # binding.pry
 
