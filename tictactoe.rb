@@ -79,13 +79,16 @@ class Game
   attr_accessor :current_player
 
   def initialize 
-    @player = Player.new("Roy", "O")
+    @player = Player.new(get_name, "O")
     @computer = Player.new("Computer", "X")
     @board = Board.new
     @current_player = @player
   end
 
-
+  def get_name
+    puts "What's your name?"
+    gets.chomp
+  end
 
   def pick_a_square
     if @current_player == @player
