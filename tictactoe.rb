@@ -21,8 +21,16 @@ class Board
     puts " #{board[7]}  | #{board[8]}  | #{board[9]}  "
   end
 
+  # def [](position)
+  #   @board[position]
+  # end
+
   def []=(position, mark)
     @board[position] = mark
+  end
+
+  def empty_square
+    @board.select {|pos, value| value == " "}.keys
   end
 end
 
@@ -45,16 +53,24 @@ class Game
   def pick_a_square
     puts "Please select a square(1-9):"
     choice = gets.chomp.to_i
+    begin
+      if !@board.empty_square.include?(choice)
+        puts "The square has been taken, please select other squares."
+        choice = gets.chomp.to_i
+        end until @board.empty_square.include?(choice)
+      end
     @board[choice] = "O"
   end
 
   def play
     @board.draw_board
+    
     pick_a_square
     @board.draw_board
+      pick_a_square
   end
 
 end
-# binding.pry
+
 Game.new.play
 
