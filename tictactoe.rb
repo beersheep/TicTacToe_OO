@@ -26,11 +26,11 @@ class Board
   end
 
   def empty_square
-    @board.select {|pos, value| value == " "}.keys
+    @board.select {|_, value| value == " "}.keys
   end
 
   def no_space
-    @board.select {|pos, value| value == " "}.size == 0
+    empty_square.size == 0
   end
 
   def check_for_empty(choice)
@@ -45,7 +45,7 @@ class Board
 end
 
 class Player
-  attr_reader :board, :mark, :name
+  attr_reader :mark, :name
   attr_accessor :squares_taken
 
   def initialize(name, mark)
@@ -58,9 +58,9 @@ class Player
     @squares_taken << choice
   end
 
-  def check_win(player)
+  def check_win
     Game::WINNING_CONDITIONS.each do |line|
-      return true if (line - player.squares_taken).empty?
+      return true if (line - squares_taken).empty?
     end
     return false
   end
@@ -68,11 +68,11 @@ class Player
 end
 
 class Game
+
   WINNING_CONDITIONS = [[1,2,3],[4,5,6],[7,8,9],
                        [1,4,7],[2,5,8],[3,6,9],
                        [1,5,9],[3,5,7]]
 
-  attr_accessor :current_player
 
   def initialize 
     @player = Player.new(get_name, "O")
@@ -91,13 +91,11 @@ class Game
       puts "Please select a square(1-9):"
       choice = gets.chomp.to_i
       @board.check_for_empty(choice)
-      @board[choice] = @current_player.mark
-      @current_player.take_square(choice)
     else
       choice = @board.empty_square.sample
-      @board[choice] = @current_player.mark
-      @current_player.take_square(choice)
     end
+    @board[choice] = @current_player.mark
+    @current_player.take_square(choice)
   end
 
   def change_player
@@ -109,9 +107,7 @@ class Game
 
   def play_again?
     puts "Would you like to play again?"
-    if gets.chomp == "y"
-      reset
-    end
+    reset if gets.chomp == "y"
   end
 
   def reset 
@@ -126,7 +122,7 @@ class Game
     loop do 
       pick_a_square
       @board.draw_board
-      if @player.check_win(@current_player)
+      if @current_player.check_win
         puts "#{@current_player.name} has won!"
         break
       end
@@ -136,13 +132,9 @@ class Game
       end
       change_player
     end
-    play if play_again?
-    puts "Thank you for playing!"
+    play_again? ? play : (puts "Thank you for playing!")
   end
 
 end
 
 Game.new.play
-
-# binding.pry
-
